@@ -1,15 +1,19 @@
 #!/bin/bash
 
-# Loop through obsid directories, where each obsid is a 10-digit number
-for obsid in {0000000000..9999999999}; do
-    # Look for GTI files in the specific directory structure
-    for gti_file in "./${obsid}/xti/event_cl/gti*.fits"; do
-        # Check if the GTI file exists and append its path to list_gti.txt
-        if [[ -f "$gti_file" ]]; then
-            echo "$gti_file" >> list_gti.txt
-        fi
-    done
+# Loop through all 10-digit directories in the current directory
+for obsid in [0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]; do
+    # Check if it's a directory
+    if [[ -d "$obsid" ]]; then
+        # Look for GTI files in the expected directory structure
+        for gti_file in "$obsid/xti/event_cl/gti"*.fits; do
+            # Check if the GTI file exists
+            if [[ -f "$gti_file" ]]; then
+                echo "$gti_file" >> tx_list_gti.txt
+                echo "Added: $gti_file"  # Print which file was added
+            fi
+        done
+    fi
 done
 
-# Print a message when done
-echo "GTI files have been appended to list_gti.txt."
+echo "Done."
+
