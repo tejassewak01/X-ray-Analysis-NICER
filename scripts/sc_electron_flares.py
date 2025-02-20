@@ -1,19 +1,24 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from astropy.io import fits
+import os
 
 # A obsid directory name can be decomposed in two parts: obsid_constant and obsid_variable.
 
 # EDIT HERE
 
-obsid_constant = ________   # For example 57060101 is the obsid_constant for a directory 5706010101 and 01 wil be obsid_variable
+obsid_constant =  # For example 57060101 is the obsid_constant for a directory 5706010101 and 01 wil be obsid_variable
 
-range1, range2 = __,__   # Range for obsid_variable - Example: 1,30
- 
-length_of_obsid_variable =  _   # For example if variable in obsid file is 01,02,03,...30 - then keep length_of_obsid_variable = 2
-                                # if variable in obsid file is 101,102,103...150 - then keep length_of_obsid_variable = 3
+# There are two options, either give range or directly list out all the obsid_variables
+# Here I have listed out all the obsid_variables and commented out the range method. 
 
-for obsid_variable in range(range1, range2):
+#range1, range2 =    # Range for obsid_variable - Example: 1,30
+
+obsid_variables = [] # Note if your variable is 01, just write 1 as padding (01) will be done later
+
+length_of_obsid_variable =     # For example if variable in obsid file is 01,02,03,...30 - then keep length_of_obsid_variable = 2
+
+for obsid_variable in obsid_variables: # CHANGE if using the range method
 
     obsid_variable = f'{obsid_variable:0{length_of_obsid_variable}}'  # Format obsid_variable as two digits so that 1 is read as 01.
 
@@ -65,13 +70,13 @@ for obsid_variable in range(range1, range2):
 
         # Common limits for consistency
         xlim_start, xlim_stop = start, stop # change here HERE.
-        max_y = max(np.nanmax(rate_lc_hard[valid_lc_hard]), np.nanmax(rate_lc_soft[valid_lc_soft]),np.nanmax(rate_lc_8to12[valid_lc_8to12]))
-        ylim_max = max_y + max_y * 0.1  # 10 percent scaling above maximum point
+        #max_y = max(np.nanmax(rate_lc_hard[valid_lc_hard]), np.nanmax(rate_lc_soft[valid_lc_soft]),np.nanmax(rate_lc_8to12[valid_lc_8to12]))
+        #ylim_max = max_y + max_y * 0.1  # 10 percent scaling above maximum point
 
         
         # Plot for 8to12 lightcurve file on the first subplot
         ax1.set_xlim(xlim_start, xlim_stop)
-        ax1.set_ylim(0, ylim_max)
+        #ax1.set_ylim(0, ylim_max)
         ax1.plot(time_lc_soft[valid_lc_soft], rate_lc_8to12[valid_lc_8to12], '.', color='blue', label='RATE (8to12 Lightcurve)')
         ax1.plot(time_mkf[valid_mkf] - time_mkf[valid_mkf][0], fpm_count[valid_mkf], 'o', color='orange', label='FPM_OVERONLY_COUNT')
         ax1.plot(time_mkf[valid_mkf] - time_mkf[valid_mkf][0], cor_sax[valid_mkf], '-', color='green', label='COR_SAX')
@@ -84,7 +89,7 @@ for obsid_variable in range(range1, range2):
         
         # Plot for hard lightcurve file on the second subplot
         ax2.set_xlim(xlim_start, xlim_stop)
-        ax2.set_ylim(0, ylim_max)
+        #ax2.set_ylim(0, ylim_max)
         ax2.plot(time_lc_hard[valid_lc_hard], rate_lc_hard[valid_lc_hard], '.', color='blue', label='RATE (Hard Lightcurve)')
         ax2.plot(time_mkf[valid_mkf] - time_mkf[valid_mkf][0], fpm_count[valid_mkf], 'o', color='orange', label='FPM_OVERONLY_COUNT')
         ax2.plot(time_mkf[valid_mkf] - time_mkf[valid_mkf][0], cor_sax[valid_mkf], '-', color='green', label='COR_SAX')
@@ -96,7 +101,7 @@ for obsid_variable in range(range1, range2):
         
         # Plot for soft lightcurve file on the third subplot
         ax3.set_xlim(xlim_start, xlim_stop)
-        ax3.set_ylim(0, ylim_max)
+        #ax3.set_ylim(0, ylim_max)
         ax3.plot(time_lc_soft[valid_lc_soft], rate_lc_soft[valid_lc_soft], '.', color='blue', label='RATE (Soft Lightcurve)')
         ax3.plot(time_mkf[valid_mkf] - time_mkf[valid_mkf][0], fpm_count[valid_mkf], 'o', color='orange', label='FPM_OVERONLY_COUNT')
         ax3.plot(time_mkf[valid_mkf] - time_mkf[valid_mkf][0], cor_sax[valid_mkf], '-', color='green', label='COR_SAX')
@@ -113,7 +118,7 @@ for obsid_variable in range(range1, range2):
             # Create the directory if it doesn't exist
             os.makedirs(directory_name)
 
-        output_filename = f'electron_flares/{obsid_constant}{var}_gti{i+1}.png'
+        output_filename = f'pl_electron_flares/{obsid_constant}{var}_gti{i+1}.png'
         plt.tight_layout()
         plt.savefig(output_filename, format='png', dpi=300)
         print(f"Plot saved as {output_filename}")
